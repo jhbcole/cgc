@@ -7,7 +7,7 @@ data edge = Edge vertex vertex deriving Show
 data graph = Graph vertex [edges] deriving Show-}
 
 import qualified Data.Graph as Graph
-
+import qualified Data.Heap as PQ
 
 isChrodal :: Graph -> Bool
 isChordal g = True
@@ -70,3 +70,21 @@ dfs g v = [v]
 nghbr :: Graph -> Vertex -> [ Vertex ]
 nghbr g v =  g !! v
 -}
+
+seo g =
+  let
+    verts = -- all verts from g
+    weights = PQ.fromList (map (\x -> (0,x)) verts)
+  in reverse (seo' g weights [])
+   
+seo' g weights l =
+  case PQ.view weights of
+    Nothing -> l
+    Just ((_, v), weights') ->
+      let
+        (left, right) = PQ.partition (\(_, v') -> {- is neighbor of v -}) weights'
+        left' = PQ.fromList (map (\(prio, val) -> (prio + 1, val)) (PQ.toList left))
+        w = PQ.union left' right
+     in seo' w (v : l)
+      
+       
