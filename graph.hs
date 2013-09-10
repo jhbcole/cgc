@@ -29,7 +29,7 @@ buildgraph v e = let e' = List.union (e) (map (\(x,y)->(y,x)) e)
                      e'' = tabulate (\n -> filter (\(x,y) -> x==n) e') (length v)
                      e''' = (map (map (\(x,y)->y)) e'')
                  in
-                  tabulate (\x -> e''' !! x) length(e''')
+                  fromList(tabulate (\x -> e''' !! x) (length(e''')))
 
 -- maxV : Returns the max numbered vertex in of an Edge
 maxV :: Edge -> Int
@@ -61,7 +61,7 @@ nghbr g v =  g !! v
 seo g =
   let
     verts = -- all verts from g
-    weights = PQ.fromList (map (\x -> (0,x)) verts)
+    weights = PQ.fromList (map (\x -> (0,x)) verts
   in reverse (seo' g weights [])
    
 seo' g weights l =
