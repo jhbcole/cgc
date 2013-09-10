@@ -6,30 +6,14 @@ data vertex = Vertex Int color deriving Show
 data edge = Edge vertex vertex deriving Show
 data graph = Graph vertex [edges] deriving Show-}
 
-import qualified Data.Graph as Graph
 
-
-isChrodal :: Graph -> Bool
-isChordal g = True
-
-cycle :: Graph ->  [[ Vertex ]]
-cycle g = [[1]]
-
-{-
-import Data.List
-import qualified Data.Set as Set
+import qualified Data.Map as Map
+import qualified Data.List as List
 
 type Vertex = Int
 type Edge = (Int,Int)
 type Edges = [Edge]
-type Graph = [[ Vertex ]]
-
-{-reduce :: ((a,a)->a)->a->[a]->a
-reduce f b ([]) = b
-reduce f b (x:[]) = f (b,x)
-reduce f b (x:y:xs) = 
--}
-
+type Graph = Map Vertex [Vertex]
 
 {-
 Graph - adjacency list,
@@ -38,10 +22,11 @@ list of edges may contain both (1,2) and (2,1) for an edge
 -}
              
 buildgraph :: [Vertex] -> Edges -> Graph
-buildgraph v e = let e' = union (e) (map (\(x,y)->(y,x)) e)
+buildgraph v e = let e' = List.union (e) (map (\(x,y)->(y,x)) e)
                      e'' = tabulate (\n -> filter (\(x,y) -> x==n) e') (length v)
+                     e''' = (map (map (\(x,y)->y)) e'')
                  in
-                  map (map (\(x,y)->y)) e''
+                  tabulate (\x -> e''' !! x) length(e''')
 
 -- maxV : Returns the max numbered vertex in of an Edge
 maxV :: Edge -> Int
@@ -69,4 +54,4 @@ dfs g v = [v]
 -- nghbr : Given a graph and a vertex, return a list of the neighboring vertices
 nghbr :: Graph -> Vertex -> [ Vertex ]
 nghbr g v =  g !! v
--}
+
