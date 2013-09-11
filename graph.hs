@@ -75,7 +75,6 @@ coloring g = let m = Map.map (\x-> -1) g
              in
                color g m s
 
--- Color graph
 color :: Graph -> Map.Map Vertex Int -> [ Vertex ] -> [(Vertex,Int)]
 color g m [] = Map.toAscList m
 color g m s = let n = nghbr g (List.head s)
@@ -85,7 +84,6 @@ color g m s = let n = nghbr g (List.head s)
                color g m' (tail s)
 
 --Finds the Minimally Excluded Element of a list
-mex :: [ Vertex ] -> Vertex
+mex :: [ Int ] -> Int
 mex [] = 0
 mex l = List.minimum([0..((List.maximum l)+2)] List.\\ l)
-
