@@ -64,5 +64,25 @@ seo' g weights l =
         left' = PQ.fromList (map (\(prio, val) -> (prio + 1, val)) (PQ.toList left))
         w = PQ.union left' right
      in seo' g w (v : l)
-      
-       
+
+-- Greedy coloring algorithm, takes a graph, outputs a list of tuples
+-- Vertex paired with Int, which represents color
+coloring :: Graph -> [(Vertex, Int)]
+coloring g = let m = Map.map (\x-> -1) g
+                 s = seo g
+              -- c = List.map(\v -> (List.map(\x -> m List.!! x)(g List.!! v))) m
+             in
+               color g m s
+                 
+color :: Graph -> Map.Map Vertex Int -> [ Vertex ] -> [(Vertex,Int)]
+color g m [] = Map.toAscList m
+color g m s = let n = nghbr g (List.head s)
+                  n' = List.map(\x -> m Map.! x) n
+                  m' = Map.insert (List.head s) (mex n') m
+              in
+               color g m' (tail s)
+
+--Finds the Minimally Excluded Element of a list
+mex :: [ Int ] -> Int
+mex [] = 0
+mex l = List.minimum([0..((List.maximum l)+2)] List.\\ l)
